@@ -28,10 +28,15 @@
     <input type="submit" value="Reset">
   </form>
 
+  <p>working</p>
 
-  <p>Start: <c:out value="${startTime}"/> </p>
-  <p>Stop: <c:out value="${stopTime}"/></p>
-  <p>Total: <c:out value="${currDuration}"/></p>
+
+  <p>Start: <c:out value="${currStartTime}"/> </p>
+  <p>Stop: <c:out value="${currTime}"/></p>
+  <p>Total: <c:out value="${currRemTime}"/></p>
+
+
+  <%--<p>Current Time: <c:out value="${}"</p>--%>
 
   </body>
 </html>
