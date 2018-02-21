@@ -1,6 +1,8 @@
 package com.naldojesse.com.models;
 
 import java.sql.Timestamp;
+import java.util.*;
+import java.text.SimpleDateFormat;
 
 public class Timer implements java.io.Serializable{
     private Timestamp start;
@@ -11,6 +13,25 @@ public class Timer implements java.io.Serializable{
         stop = null;
     }
 
+
+    public static String convertTime(long timestamp) {
+        TimeZone tz = TimeZone.getDefault();
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm a");
+        formatter.setTimeZone(tz);
+
+        Date date = new Date(timestamp);
+        String dateFormatted = formatter.format(date);
+        System.out.println(dateFormatted);
+        return dateFormatted;
+    }
+
+
+    public static String convertMS(long milliseconds) {
+        long ms = milliseconds & 1000;
+        long s = (milliseconds/1000) % 60;
+        long m = (milliseconds/ (1000*60)) % 60;
+        return String.format("%02d:%02d:%04d", m,s, ms);
+    }
 
     public java.lang.Long getStart() {
         if (start == null) {
@@ -37,6 +58,19 @@ public class Timer implements java.io.Serializable{
 
     public long calcDuration() {
         return stop.getTime() - start.getTime();
+    }
+
+    public String getStartTime() {
+        return convertTime(start.getTime());
+    }
+
+    public String getStopTime() {
+        return convertTime(stop.getTime());
+    }
+
+    public String calcDurationTime() {
+        long result = stop.getTime() - start.getTime();
+        return convertMS(result);
     }
 
 }

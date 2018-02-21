@@ -13,11 +13,11 @@ import com.naldojesse.com.models.Timer;
 
 import java.util.Objects;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @WebServlet("/stopwatch")
 public class Timers extends HttpServlet {
@@ -140,35 +140,21 @@ public class Timers extends HttpServlet {
             }
         }
 
+
+
         request.setAttribute("archivedTimers", session.getAttribute("archivedTimers"));
 
-
-
-        request.setAttribute("currStartTime", cTimerStart);
-
-
-//        System.out.println(System.currentTimeMillis());
-//        long days = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis());
-
-        TimeZone tz = TimeZone.getDefault();
-        SimpleDateFormat formatter= new SimpleDateFormat("HH:mm a");
-        formatter.setTimeZone(tz);
-
-        Date date = new Date(System.currentTimeMillis());
-        String dateFormatted = formatter.format(date);
-        System.out.println(dateFormatted);
-
-        request.setAttribute("currTime", dateFormatted);
-
-//        request.setAttribute("currTime", System.currentTimeMillis());
+        request.setAttribute("currTime", Timer.convertTime(System.currentTimeMillis()));
 
         java.lang.Long runTime;
         if (cTimerStart != null) {
             runTime = System.currentTimeMillis() - cTimerStart;
-        } else {
-            runTime = null;
+            request.setAttribute("currStartTime", Timer.convertTime(cTimerStart));
+            request.setAttribute("currRunTime", Timer.convertMS(runTime));
         }
-        request.setAttribute("currRunTime", runTime);
+
+
+
 
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
