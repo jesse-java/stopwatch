@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @WebServlet("/stopwatch")
 public class Timers extends HttpServlet {
 
-
+    ArrayList<Timer> prevTimers;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -35,6 +35,9 @@ public class Timers extends HttpServlet {
         java.lang.Long cTimerStart = null;
         java.lang.Long cTimerStop = null;
         boolean prevTimersExist = false;
+
+
+
 
         HttpSession session = request.getSession();
         if (session.getAttribute("currTimer") != null) {
@@ -56,13 +59,14 @@ public class Timers extends HttpServlet {
         }
 
 
+
         if (session.getAttribute("archivedTimers") != null) {
             prevTimersExist = true;
-            prevtimers = (ArrayList<Timer>) session.getAttribute("archivedTimers");
         } else {
             session.setAttribute("archivedTimers", new ArrayList<Timer>());
-            prevTim
         }
+
+        prevTimers = (ArrayList<Timer>) session.getAttribute("archivedTimers");
 
 
         // ------------------------------------------------------------------------------------
@@ -84,6 +88,7 @@ public class Timers extends HttpServlet {
 
                     if (cTimerStop == null) {
                         cTimer.setStop();
+                        prevTimers.add(cTimer);
 
                     }
                 }
@@ -94,12 +99,9 @@ public class Timers extends HttpServlet {
                 Timer timer = new Timer();
                 session.setAttribute("currTimer", timer);
 
-                //send needed attributes to request display
                 System.out.println(timer.getStart());
-
                 cTimerStart = timer.getStart();
-//                request.setAttribute("startTime", timer.getStart());
-//                request.setAttribute("currentTime", System.currentTimeMillis());
+
 
 
             } else if (Objects.equals(action, "stop") == true) {
@@ -149,14 +151,19 @@ public class Timers extends HttpServlet {
 
         }
 
-
-        //test if nullpointer exception or any exception
+        request.setAttribute("archivedTimers", session.getAttribute("archivedTimers"));
         request.setAttribute("currStartTime", cTimerStart);
         request.setAttribute("currTime", System.currentTimeMillis());
-        request.setAttribute("currRemTime", System.currentTimeMillis() - cTimerStart);
+
+        java.lang.Long runTime;
+        if (cTimerStart != null) {
+            runTime = System.currentTimeMillis() - cTimerStart;
+        } else {
+            runTime = null;
+        }
+        request.setAttribute("currRunTime", runTime);
 
         request.getRequestDispatcher("index.jsp").forward(request, response);
-
     }
 
 }

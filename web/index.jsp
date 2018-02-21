@@ -5,8 +5,9 @@
   Time: 5:45 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.naldojesse.com.models.Timer" import="java.util.ArrayList"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 
 <html>
   <head>
@@ -28,15 +29,26 @@
     <input type="submit" value="Reset">
   </form>
 
-  <p>working</p>
-
-
   <p>Start: <c:out value="${currStartTime}"/> </p>
-  <p>Stop: <c:out value="${currTime}"/></p>
-  <p>Total: <c:out value="${currRemTime}"/></p>
+  <p>Current Time: <c:out value="${currTime}"/></p>
+  <p>Running Time: <c:out value="${currRunTime}"/></p>
 
 
-  <%--<p>Current Time: <c:out value="${}"</p>--%>
+  <%
+    // retrieve your list from the request, with casting
+    ArrayList<Timer> list = (ArrayList<Timer>) request.getAttribute("archivedTimers");
+
+// print the information about every category of the list
+
+
+
+
+    for(Timer t : list) {
+      out.println(t.getStart());
+      out.println(t.getStop());
+      out.println(t.calcDuration());
+    }
+  %>
 
   </body>
 </html>
