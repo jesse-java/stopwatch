@@ -5,7 +5,7 @@
   Time: 5:45 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.naldojesse.com.models.Timer" import="java.util.ArrayList"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="com.naldojesse.com.models.Timer" import="java.util.ArrayList" import="java.util.concurrent.TimeUnit"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
@@ -29,26 +29,32 @@
     <input type="submit" value="Reset">
   </form>
 
-  <p>Start: <c:out value="${currStartTime}"/> </p>
+  <p>Start: <c:out value="${currStartTime}"/></p>
   <p>Current Time: <c:out value="${currTime}"/></p>
   <p>Running Time: <c:out value="${currRunTime}"/></p>
 
 
-  <%
-    // retrieve your list from the request, with casting
-    ArrayList<Timer> list = (ArrayList<Timer>) request.getAttribute("archivedTimers");
 
-// print the information about every category of the list
+  <%  ArrayList<Timer> list = (ArrayList<Timer>) request.getAttribute("archivedTimers"); %>
+  <table>
+      <thead>
+        <th>Start</th>
+        <th>Stop</th>
+        <th>Total</th>
+      </thead>
+      <% if (list != null) { %>
+          <% for (Timer t : list) { %>
+              <tr>
+                  <td><%= t.getStart() %></td>
+                  <td><%= t.getStop() %></td>
+                  <td><%= t.calcDuration() %></td>
+              </tr>
+          <% } %>
+      <% } %>
 
 
+  </table>
 
-
-    for(Timer t : list) {
-      out.println(t.getStart());
-      out.println(t.getStop());
-      out.println(t.calcDuration());
-    }
-  %>
 
   </body>
 </html>

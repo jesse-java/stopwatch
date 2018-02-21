@@ -15,6 +15,9 @@ import java.util.Objects;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+import java.util.Date;
 
 @WebServlet("/stopwatch")
 public class Timers extends HttpServlet {
@@ -100,6 +103,8 @@ public class Timers extends HttpServlet {
                 session.setAttribute("currTimer", timer);
 
                 System.out.println(timer.getStart());
+
+
                 cTimerStart = timer.getStart();
 
 
@@ -108,52 +113,54 @@ public class Timers extends HttpServlet {
                 //user presses stop button
 
 
-                if (session.getAttribute("currTimer") != null) {
+                if (cTimer != null) {
 
                     System.out.println("stopping current timer!");
-                    Timer timer = (Timer) session.getAttribute("currTimer");
 
-                    if (timer.getStop() != null) {
-                        request.getRequestDispatcher("index.jsp").forward(request, response);
+                    //if current timer in session already has a stop time, then just redirect back to index
+                    if (cTimerStop == null) {
+
+                        cTimer.setStop();
+                        prevTimers.add(cTimer);
+                        System.out.println(cTimer.getStop());
+
+                        //clear currTimer in session
+                        session.removeAttribute("currTimer");
                     }
 
 
-                    timer.setStop();
-                    System.out.println(timer.getStop());
-
-
-                    request.setAttribute("startTime", timer.getStart());
-                    System.out.println(timer.getStop());
-                    request.setAttribute("stopTime", timer.getStop());
-                    request.setAttribute("currDuration", timer.calcDuration());
-
-                    //clear everything in session
-                    session.removeAttribute("currTimer");
-
-
-                } else {
-                    //user presses stop button where there is no current timer in session
-                    System.out.println("Stop was pressed without a current timer!");
                 }
 
 
             } else if (Objects.equals(action, "reset") == true) {
 //            reset button was pressed
                 System.out.println("resetting current timer!");
-                session.invalidate();
+                session.removeAttribute("archivedTimers");
+                session.removeAttribute(("currTimer"));
             }
-
-        } else {
-            if (session.getAttribute("currTimer") != null) {
-                Timer currentTimer = (Timer) session.getAttribute("currTimer");
-
-            }
-
         }
 
         request.setAttribute("archivedTimers", session.getAttribute("archivedTimers"));
+
+
+
         request.setAttribute("currStartTime", cTimerStart);
-        request.setAttribute("currTime", System.currentTimeMillis());
+
+
+//        System.out.println(System.currentTimeMillis());
+//        long days = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis());
+
+        TimeZone tz = TimeZone.getDefault();
+        SimpleDateFormat formatter= new SimpleDateFormat("HH:mm a");
+        formatter.setTimeZone(tz);
+
+        Date date = new Date(System.currentTimeMillis());
+        String dateFormatted = formatter.format(date);
+        System.out.println(dateFormatted);
+
+        request.setAttribute("currTime", dateFormatted);
+
+//        request.setAttribute("currTime", System.currentTimeMillis());
 
         java.lang.Long runTime;
         if (cTimerStart != null) {
