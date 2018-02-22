@@ -14,10 +14,6 @@ import com.naldojesse.com.models.Timer;
 import java.util.Objects;
 
 import java.util.ArrayList;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 @WebServlet("/stopwatch")
 public class Timers extends HttpServlet {
@@ -31,31 +27,22 @@ public class Timers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //set up session before starting
-        boolean currTimerExists = false;
         Timer cTimer = null;
-        boolean cTimerStartExists = false;
-        boolean cTimerStopExists = false;
+
         java.lang.Long cTimerStart = null;
         java.lang.Long cTimerStop = null;
-        boolean prevTimersExist = false;
-
-
-
 
         HttpSession session = request.getSession();
         if (session.getAttribute("currTimer") != null) {
-            currTimerExists = true;
 
             cTimer = (Timer) session.getAttribute("currTimer");
 
             if (cTimer.getStart() != null) {
-                cTimerStartExists = true;
                 cTimerStart = cTimer.getStart();
 
             }
 
             if (cTimer.getStop() != null) {
-                cTimerStopExists = true;
                 cTimerStop = cTimer.getStop();
             }
 
@@ -63,9 +50,7 @@ public class Timers extends HttpServlet {
 
 
 
-        if (session.getAttribute("archivedTimers") != null) {
-            prevTimersExist = true;
-        } else {
+        if (session.getAttribute("archivedTimers") == null) {
             session.setAttribute("archivedTimers", new ArrayList<Timer>());
         }
 

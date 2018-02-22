@@ -14,6 +14,7 @@ public class Timer implements java.io.Serializable{
     }
 
 
+    //method that converts a long into a formatted date
     public static String convertTime(long timestamp) {
         TimeZone tz = TimeZone.getDefault();
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm a");
@@ -26,6 +27,7 @@ public class Timer implements java.io.Serializable{
     }
 
 
+    //converts a timestamp into milliseconds, seconds, and minutes
     public static String convertMS(long milliseconds) {
         long ms = milliseconds & 1000;
         long s = (milliseconds/1000) % 60;
@@ -56,9 +58,6 @@ public class Timer implements java.io.Serializable{
         stop = new Timestamp(System.currentTimeMillis());
     }
 
-    public long calcDuration() {
-        return stop.getTime() - start.getTime();
-    }
 
     public String getStartTime() {
         return convertTime(start.getTime());

@@ -35,22 +35,29 @@
   <p>Running Time: <c:out value="${currRunTime}"/></p>
 
 
-  <%  ArrayList<Timer> list = (ArrayList<Timer>) request.getAttribute("archivedTimers"); %>
+  <%--<%  ArrayList<Timer> list = (ArrayList<Timer>) request.getAttribute("archivedTimers"); %>--%>
   <table border="1">
       <thead>
         <th>Start</th>
         <th>Stop</th>
         <th>Total</th>
       </thead>
-      <% if (list != null) { %>
-          <% for (Timer t : list) { %>
-              <tr>
-                  <td><%= t.getStartTime() %></td>
-                  <td><%= t.getStopTime() %></td>
-                  <td><%= t.calcDurationTime() %></td>
-              </tr>
-          <% } %>
-      <% } %>
+      <%--<% if (list != null) { %>--%>
+          <%--<% for (Timer t : list) { %>--%>
+              <%--<tr>--%>
+                  <%--<td><%= t.getStartTime() %></td>--%>
+                  <%--<td><%= t.getStopTime() %></td>--%>
+                  <%--<td><%= t.calcDurationTime() %></td>--%>
+              <%--</tr>--%>
+          <%--<% } %>--%>
+      <%--<% } %>--%>
+      <c:forEach items="${archivedTimers}" var="timer">
+          <tr>
+              <td><c:out value="${timer.getStartTime()}"/></td>
+              <td><c:out value="${timer.getStopTime()}"/></td>
+              <td><c:out value="${timer.calcDurationTime()}"/></td>
+          </tr>
+      </c:forEach>
 
 
   </table>
